@@ -1,4 +1,9 @@
-# chameleon-rs
+<h1 align="center">chameleon-rs</h1>
+
+<p align="center">
+  <img src="./.github/assets/COVER.png" alt="Chameleons">
+</p>
+
 
 Prototypes on polymorphic, metamorphic and poly-metamorphic malwares in Rust.
 
