@@ -94,10 +94,19 @@ impl PolymorphicEngine {
     }
 
     fn decrypt_binary_region(&mut self, region_start: usize, region_size: usize) {
+        self.xor_binary_region(region_start, region_size)
+    }
+
+    fn encrypt_binary_region(&mut self, region_start: usize, region_size: usize) {
+        self.xor_binary_region(region_start, region_size)
+    }
+
+    fn xor_binary_region(&mut self, region_start: usize, region_size: usize) {
         unsafe {
-            for i in 0..region_size {
-                self.tmp_data[region_start + i] ^= XOR_KEY[i];
-            }
+            self.tmp_data[region_start..region_start+region_size]
+                .iter_mut()
+                .zip(&XOR_KEY[0..region_size])
+                .for_each(|(a, b)| *a ^= b)
         }
     }
 
@@ -107,17 +116,7 @@ impl PolymorphicEngine {
         unsafe {
             rng.fill_bytes(&mut XOR_KEY);
 
-            for i in 0..region_size {
-                self.tmp_data[region_start + i] = XOR_KEY[i];
-            }
-        }
-    }
-
-    fn encrypt_binary_region(&mut self, region_start: usize, region_size: usize) {
-        unsafe {
-            for i in 0..region_size {
-                self.tmp_data[region_start + i] ^= XOR_KEY[i];
-            }
+            self.tmp_data[region_start..region_start+region_size].copy_from_slice(&XOR_KEY[0..region_size]);
         }
     }
 
